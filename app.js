@@ -4,6 +4,7 @@ var MIN_SPECIAL_HIT = 1;
 var MAX_SPECIAL_HIT = 15;
 var MIN_HEAL = 5;
 var MAX_HEAL = 15;
+var MAGIC_CONSUPTION = 10;
 var YOUR_TEXT_STYLE_CLASS = 'player-turn';
 var MONSTER_TEXT_STYLE_CLASS = 'monster-turn';
 var HEAL_TEXT_STYLE_CLASS = 'player-turn';
@@ -13,6 +14,7 @@ new Vue({
   data: {
     isGameOver: true,
     yourHealth: 100,
+    yourMagic: 100,
     monsterHealth: 100,
     logs: []
   },
@@ -20,6 +22,7 @@ new Vue({
     startNewGame: function() {
       this.isGameOver = false;
       this.yourHealth = 100;
+      this.yourMagic = 100;
       this.monsterHealth = 100;
       this.logs = [];
     },
@@ -29,11 +32,16 @@ new Vue({
       return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     },
     attack: function(isSpecial) {
-      var hit = this.randomInt(isSpecial ? MIN_SPECIAL_HIT : MIN_HIT,isSpecial ? MAX_SPECIAL_HIT : MAX_HIT);
-      this.monsterHealth -= hit;
-      this.logMessage('You Hit Monster! He loses ' + hit, [YOUR_TEXT_STYLE_CLASS]);
-      this.damage(isSpecial);
-      this.checkWin();
+      if(isSpecial && this.yourMagic <= 0) {
+        this.logMessage('Not enough Magic Power', [YOUR_TEXT_STYLE_CLASS]);
+      } else {
+        var hit = this.randomInt(isSpecial ? MIN_SPECIAL_HIT : MIN_HIT,isSpecial ? MAX_SPECIAL_HIT : MAX_HIT);
+        this.monsterHealth -= hit;
+        if(isSpecial) this.yourMagic -= MAGIC_CONSUPTION;
+        this.logMessage('You Hit Monster! He loses ' + hit, [YOUR_TEXT_STYLE_CLASS]);
+        this.damage(isSpecial);
+        this.checkWin();
+      }
     },
     damage: function(isSpecial) {
       var hit = this.randomInt(isSpecial ? MIN_SPECIAL_HIT : MIN_HIT,isSpecial ? MAX_SPECIAL_HIT : MAX_HIT);
