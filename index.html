@@ -20,10 +20,18 @@
     <section class="row">
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
+            <p>HP</p>
             <div class="healthbar">
                 <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;"
                 :style="{width: yourHealth + '%'}">
                   {{ yourHealth }}
+                </div>
+            </div>
+            <p>MP</p>
+            <div class="magicbar">
+                <div class="magicbar text-center" style="background-color: green; margin: 0; color: white;"
+                :style="{width: yourMagic + '%'}">
+                  {{ yourMagic }}
                 </div>
             </div>
         </div>
